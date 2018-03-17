@@ -48,7 +48,7 @@ class AppBoot
     {
         $app = self::getAppInstance();
         $app->run();
-        unset($app); //消耗对象
+        unset($app); //销毁对象，释放内存
     }
 
     //获取app实例对象
