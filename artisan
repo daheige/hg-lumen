@@ -19,7 +19,6 @@ define('ROOT_PATH', __DIR__);
 
 //加载composer工具类
 require_once ROOT_PATH . '/vendor/autoload.php';
-
 $app = App\AppBoot::getAppInstance();
 
 /*

@@ -6,7 +6,8 @@ namespace App;
  */
 class AppBoot
 {
-    public static function loadInitConf()
+    public static $_instance = null;
+    public static function initConf()
     {
         // 默认时区定义
         date_default_timezone_set('Asia/Shanghai');
@@ -48,11 +49,23 @@ class AppBoot
     {
         $app = self::getAppInstance();
         $app->run();
-        unset($app); //销毁对象，释放内存
     }
 
-    //获取app实例对象
+    //获取$app的一个实例
     public static function getAppInstance()
+    {
+        if (self::$_instance == null) {
+            self::initSystem();
+            //加入lumen框架app设置
+            $app             = require_once APP_PATH . '/bootstrap/app.php';
+            self::$_instance = $app;
+        }
+
+        return self::$_instance;
+    }
+
+    //初始化设置
+    public static function initSystem()
     {
         //加载常量
         self::loadConstants();
@@ -61,13 +74,7 @@ class AppBoot
         self::handlError();
 
         //加载初始化配置
-        self::loadInitConf();
-
-        //启动应用
-        $app = require_once APP_PATH . '/bootstrap/app.php';
-
-        //加载路由
-        require_once APP_PATH . '/routes/web.php';
-        return $app;
+        self::initConf();
     }
+    
 }

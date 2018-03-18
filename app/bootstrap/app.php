@@ -90,5 +90,7 @@ $app->middleware([
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
-//路由加载放在AppBoot中的runApp()中
+//加载路由
+require_once APP_PATH . '/routes/web.php';
+
 return $app;
