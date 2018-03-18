@@ -3,6 +3,7 @@
     1.该框架基于lumen5.5.* 定制而成，调整了lumen官网提供的目录结构
     2.本项目改造采用MIT授权协议
 ## 网站目录
+```
 .
 |   ├── app
 │   ├── AppBoot.php         app启动文件
@@ -41,7 +42,6 @@
     ├── autoload.php
 
 ## nginx配置
-```
 server {
         listen 80;
         index index.php index.html index.htm;
