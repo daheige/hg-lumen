@@ -7,4 +7,6 @@ $app->router->group([
         return $router->app->version();
     });
     $router->get('/test', 'ExampleController@test');
+    $router->get('/info', 'ExampleController@info');
+    $router->get('/get-user', 'ExampleController@getUser');
 });

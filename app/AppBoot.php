@@ -64,11 +64,20 @@ class AppBoot
         return self::$_instance;
     }
 
+    public function loadFunctions()
+    {
+        include_once FUNC_PATH . '/common.php';      //加载公共函数库
+        load_functions(['array', 'alias', 'logic']); //加载函数，可以加载多个文件
+    }
+
     //初始化设置
     public static function initSystem()
     {
         //加载常量
         self::loadConstants();
+
+        //加载公共函数库
+        self::loadFunctions();
 
         //注册错误抓取事件
         self::handlError();
@@ -76,5 +85,5 @@ class AppBoot
         //加载初始化配置
         self::initConf();
     }
-    
+
 }

@@ -18,4 +18,17 @@ class ExampleController extends Controller
     {
         return view('index', ['name' => 'heige']);
     }
+
+    public function info()
+    {
+        $redis = redis();
+        $redis->set('hg_name', 'daheige');
+        return "redis set success!";
+    }
+
+    public function getUser()
+    {
+        echo logic('Test')->getUser();
+        die;
+    }
 }

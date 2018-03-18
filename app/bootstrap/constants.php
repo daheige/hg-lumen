@@ -6,6 +6,12 @@ defined('APP_PATH') or define('APP_PATH', ROOT_PATH . '/app');
 // WEB 所在目录
 define('DOC_PATH', ROOT_PATH . '/public');
 
+//config配置目录
+define('CONF_PATH', ROOT_PATH . '/config');
+
+//助手函数目录
+define('FUNC_PATH', APP_PATH . '/Functions');
+
 // 外部库所在目录
 define('VENDOR_PATH', ROOT_PATH . '/vendor');
 
