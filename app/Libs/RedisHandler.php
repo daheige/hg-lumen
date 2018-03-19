@@ -19,19 +19,19 @@ class RedisHandler
 
         if ($config == 'REDIS_DEFAULT') {
             $conf = [
-                'server' => '127.0.0.1',
+                'host' => '127.0.0.1',
                 'port'   => 6379,
             ];
         } else {
             $conf = is_array($config) && !empty($config) ? $config : [
-                'server' => '127.0.0.1',
+                'host' => '127.0.0.1',
                 'port'   => 6379,
             ];
         }
 
         $this->redis = new \Redis();
         try {
-            $this->redis->connect($conf['server'], $conf['port']);
+            $this->redis->connect($conf['host'], $conf['port']);
             if (isset($conf['password']) && $conf['password']) {
                 $this->redis->auth($conf['password']);
             }
