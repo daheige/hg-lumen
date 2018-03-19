@@ -7,7 +7,7 @@ namespace App;
 class AppBoot
 {
     public static $_instance = null;
-    public static function initConf()
+    public static function initEnvConf()
     {
         // 默认时区定义
         date_default_timezone_set('Asia/Shanghai');
@@ -18,7 +18,7 @@ class AppBoot
         // 设置内部字符默认编码为 UTF-8
         mb_internal_encoding('UTF-8');
         // 打开/关闭错误显示
-        ini_set('display_errors', !PRODUCTION);
+        ini_set('display_errors', !IS_PRO);
         // 避免 cli 或 curl 模式下 xdebug 输出 html 调试信息
         ini_set('html_errors', !(IS_CLI || IS_CURL));
         // 使得在 api|ajax 模式下，输出 json 格式的错误信息
@@ -70,20 +70,20 @@ class AppBoot
         load_functions(['array', 'alias', 'logic']); //加载函数，可以加载多个文件
     }
 
-    //初始化设置
+    //初始化项目设置
     public static function initSystem()
     {
         //加载常量
         self::loadConstants();
-
-        //加载公共函数库
-        self::loadFunctions();
-
+        
         //注册错误抓取事件
         self::handlError();
 
         //加载初始化配置
-        self::initConf();
+        self::initEnvConf();
+        
+        //加载公共函数库
+        self::loadFunctions();
     }
 
 }
