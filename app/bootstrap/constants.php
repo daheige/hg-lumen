@@ -40,6 +40,7 @@ define('SYS_VERSION', '1.0.0');
 
 // 生产环境
 defined('IS_PRO') or define('IS_PRO', APP_ENV == 'production' || is_file('/etc/php.env.production'));
+defined('PRODUCTION', IS_PRO);
 
 // 预发环境
 defined('STAGING') || define('STAGING', is_file('/etc/php.env.staging'));
@@ -66,6 +67,7 @@ define('IS_WIN', (DIRECTORY_SEPARATOR === '\\'));
 if (IS_CLI) {
     define('IS_AJAX', false);
     define('IS_CURL', false);
+    define('API_MODE', false);
     define('HTTP_HOST', null);
     define('HTTP_PROTOCOL', null);
     define('HTTP_BASE', null);
