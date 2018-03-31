@@ -26,9 +26,6 @@ define('LOG_PATH', ROOT_PATH . '/storage/logs');
 //fastcgi_param APP_ENV "TESTING";#TESTING;PRODUCTION;STAGING
 define('APP_ENV', isset($_SERVER['APP_ENV']) ? strtolower($_SERVER['APP_ENV']) : 'production');
 
-//测试或本地环境打开调试模式，线上环境关闭
-define('APP_DEBUG', in_array(APP_ENV, ['testing', 'local']));
-
 // 定义项目开始时间
 defined('START_TIME') || define('START_TIME', microtime(true));
 
@@ -50,6 +47,9 @@ defined('TESTING') || define('TESTING', is_file('/etc/php.env.testing'));
 
 // 开发环境
 defined('DEVELOPMENT') || define('DEVELOPMENT', !(IS_PRO || STAGING || TESTING));
+
+//测试或本地环境打开调试模式，线上环境关闭
+defined('APP_DEBUG') || define('APP_DEBUG', !IS_PRO || in_array(APP_ENV, ['testing', 'local']));
 
 //js目录 相对于public目录
 define('JS_SRC', '/' . (DEVELOPMENT || TESTING ? 'js_src' : 'js'));

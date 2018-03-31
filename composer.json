@@ -1,7 +1,7 @@
 {
-    "name": "laravel/lumen",
-    "description": "The Laravel Lumen Framework.",
-    "keywords": ["framework", "laravel", "lumen"],
+    "name": "hg-lumen",
+    "description": "The Framework can make web or api application",
+    "keywords": ["framework", "laravel", "lumen", "hg-lumen"],
     "license": "MIT",
     "type": "project",
     "require": {
@@ -20,8 +20,8 @@
         }
     },
     "scripts": {
-        "post-root-package-install": [
-
+        "post-update-cmd": [
+            "composer dump-autoload --optimize"
         ]
     },
     "minimum-stability": "dev",

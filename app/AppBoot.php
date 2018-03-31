@@ -10,7 +10,7 @@ class AppBoot
     public static function initEnvConf()
     {
         // 默认时区定义
-        date_default_timezone_set('Asia/Shanghai');
+        date_default_timezone_set('PRC');
         // 设置错误报告模式
         error_reporting(E_ALL);
         // 设置默认区域
@@ -57,7 +57,7 @@ class AppBoot
         if (self::$_instance == null) {
             self::initSystem();
             //加入lumen框架app设置
-            $app             = require_once APP_PATH . '/bootstrap/app.php';
+            $app             = require APP_PATH . '/bootstrap/app.php';
             self::$_instance = $app;
         }
 

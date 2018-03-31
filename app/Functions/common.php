@@ -34,13 +34,29 @@ function redis($config = 'default')
 }
 
 /**
- * [get_config 动态读取配置文件内容]
- * // var_dump(get_config('redis.game'));
- * // var_dump(get_config('redis.game.server'));
- * // var_dump(get_config('redis.game.server'));
- * @param  [type] $name         [redis.game 支持redis.game.server 最多二级读取]
- * @param  [type] $value        [默认值，如配置文件中没有配置值，可以自定义值]
- * @return [type] [配置内容 array or string]
+ * 将当前环境转换为字符串
+ */
+function env_str()
+{
+    switch (true) {
+        case PRODUCTION:
+            return 'production';
+        case STAGING:
+            return 'staging';
+        case TESTING:
+            return 'testing';
+        default:
+            return 'local';
+    }
+}
+
+/**
+ * 加载配置文件数据
+ *     get_config('database')
+ *     get_config('database.default.adapter')
+ *
+ * @param  string  $name
+ * @return mixed
  */
 function get_config($name, $value = null)
 {
@@ -49,11 +65,10 @@ function get_config($name, $value = null)
     if (array_key_exists($name_hash, $info)) {
         return $info[$name_hash];
     }
-
     if (strpos($name, '.') !== false) {
         $arr = explode('.', $name);
         //优先从环境目录读取,最后从Conf目录下读取
-        $filename = CONF_PATH . (IS_PRO ? '/production/' : '/testing/') . $arr[0] . '.php';
+        $filename = CONF_PATH . env_str() . '/' . $arr[0] . '.php';
         if (!is_file($filename)) {
             $filename = CONF_PATH . '/' . $arr[0] . '.php';
             if (!is_file($filename)) {
@@ -61,32 +76,29 @@ function get_config($name, $value = null)
                 return $info[$name_hash];
             }
         }
-
         //缓存文件内容，防止反复导入
         $filename_hash = md5($filename);
         if (!isset($info[$filename_hash])) {
-            $info[$filename_hash] = include_once $filename;
+            $info[$filename_hash] = include $filename;
         }
-        $config = $info[$filename_hash];
 
+        $config = $info[$filename_hash];
         if (count($arr) == 2) {
             $info[$name_hash] = array_key_exists($arr[1], $config) ? $config[$arr[1]] : $value;
             return $info[$name_hash];
         }
-
         if (count($arr) == 3) {
             $secondArr        = array_key_exists($arr[1], $config) ? $config[$arr[1]] : [];
             $info[$name_hash] = array_key_exists($arr[2], $secondArr) ? $secondArr[$arr[2]] : $value;
             return $info[$name_hash];
         }
-
         $info[$name_hash] = null;
         return $info[$name_hash];
     }
 
     //读取整个文件内容
     //优先从环境目录读取,最后从Conf目录下读取
-    $filename = CONF_PATH . (IS_PRO ? '/production/' : '/testing/') . $name . '.php';
+    $filename = CONF_PATH . env_str() . '/' . $name . '.php';
     if (!is_file($filename)) {
         $filename = CONF_PATH . '/' . $name . '.php';
         if (!is_file($filename)) {
@@ -94,15 +106,45 @@ function get_config($name, $value = null)
             return $info[$name_hash];
         }
     }
-
     //缓存文件内容，防止反复导入
     $filename_hash = md5($filename);
     if (!isset($info[$filename_hash])) {
-        $info[$filename_hash] = include_once $filename;
+        $info[$filename_hash] = include $filename;
     }
 
     $info[$name_hash] = $info[$filename_hash];
     return $info[$name_hash];
+}
+
+if (!function_exists('last_sql')) {
+    /**
+     * @desc 获取最新一条sql语句 例子: dd(last_sql(3));
+     * @param  int     $count
+     * @param  int     $dataType 1字符串 2数组
+     * @return array
+     */
+    function last_sql($count = 1, $dataType = 1)
+    {
+        if (strtolower(get_config('app.env')) == 'testing') {
+            \DB::enableQueryLog();
+        }
+
+        $arrSql = \DB::getQueryLog();
+        $total  = count($arrSql);
+        $pos    = $total - $count;
+        $pos    = $pos > 0 ? $pos : 0;
+
+        $arrSql = array_slice($arrSql, $pos);
+        if ($dataType == 1) {
+            foreach ($arrSql as $key => $arr) {
+                $sql          = $arr['query'];
+                $sql          = str_replace('?', '%s', $sql);
+                $arrSql[$key] = vsprintf($sql, $arr['bindings']);
+            }
+        }
+
+        return $arrSql;
+    }
 }
 
 /**

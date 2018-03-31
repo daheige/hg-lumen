@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>teplate page</title>
-    <!-- <link rel="stylesheet" href=""> -->
 </head>
 <body>
     <h1>welcome to hg-lumen page</h1>

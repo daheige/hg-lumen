@@ -27,6 +27,10 @@ $app->withFacades();
 //开启ORM模式
 $app->withEloquent();
 
+//自定配置文件在config中
+//使用 $app->configure() 方法进行加载.
+$app->configure('app');
+
 //monolog配置
 $app->configureMonologUsing(function (Monolog\Logger $monoLog) use ($app) {
     return $monoLog->pushHandler(
@@ -71,9 +75,9 @@ $app->middleware([
     App\Http\Middleware\RequestLog::class, //记录请求参数日志
 ]);
 
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'checkParams' => App\Http\Middleware\CheckParamsWare::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -90,7 +94,7 @@ $app->middleware([
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
 
-//加载路由
+//@heige 2018-3-31 加载路由(放在routes中)
 require_once APP_PATH . '/routes/web.php';
 
 return $app;
