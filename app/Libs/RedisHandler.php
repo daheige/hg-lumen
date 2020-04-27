@@ -39,7 +39,7 @@ class RedisHandler
             
             //设置redis key前缀
             if (isset($conf['prefix']) && $conf['prefix']) {
-                $this->redis->setOption(\Redis::OPT_PREFIX, $prefix); // use custom prefix on all keys
+                $this->redis->setOption(\Redis::OPT_PREFIX, $conf["prefix"]); // use custom prefix on all keys
             }
 
             //设置redis database哪个库,默认最大不超过16个库,默认采用第0个库
